@@ -28,6 +28,27 @@
 
 import "./index.css";
 
-console.log(
-  '👋 This message is being logged by "renderer.js", included via webpack',
-);
+document.addEventListener("dragenter", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+});
+
+document.addEventListener("dragover", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+});
+
+document.addEventListener("drop", async (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const pathArr: string[] = [];
+  for (const f of event.dataTransfer.files) {
+    // Using the path attribute to get absolute file path
+    console.log("File Path of dragged files: ", f.path);
+    pathArr.push(f.path); // assemble array for main.js
+  }
+  console.log(pathArr);
+  const data = await window.dropbox.drop(pathArr);
+  console.log(data);
+});
