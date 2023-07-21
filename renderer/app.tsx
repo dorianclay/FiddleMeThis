@@ -8,6 +8,10 @@ const App = () => {
     <>
       <head>
         <meta charSet="UTF-8" />
+        <meta
+          httpEquiv="Content-Security-Policy"
+          content="default-src 'none'"
+        ></meta>
         <title>Hello World!</title>
       </head>
       <body>
