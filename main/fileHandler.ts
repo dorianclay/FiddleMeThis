@@ -30,8 +30,13 @@ const createTempDir = async () => {
 };
 
 export const cleanTemp = () => {
-  console.log(`Cleaning ${tempDir}`);
-  fs.rmSync(tempDir, { recursive: true });
+  try {
+    fs.rmSync(tempDir, { recursive: true });
+  } catch (err) {
+    console.error(err.message);
+  } finally {
+    console.log(`Cleaned ${tempDir}`);
+  }
 };
 
 export const parseSazIndex = async (indexFile: string): Promise<string[][]> => {

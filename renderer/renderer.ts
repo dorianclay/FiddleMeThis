@@ -26,7 +26,7 @@
  * ```
  */
 
-import "./index.css";
+import "./main.css";
 
 document.addEventListener("dragenter", (event) => {
   event.preventDefault();
@@ -45,10 +45,8 @@ document.addEventListener("drop", async (event) => {
   const pathArr: string[] = [];
   for (const f of event.dataTransfer.files) {
     // Using the path attribute to get absolute file path
-    console.log("File Path of dragged files: ", f.path);
     pathArr.push(f.path); // assemble array for main.js
   }
-  console.log(pathArr);
 
   try {
     const data = await window.dropbox.drop(pathArr);
