@@ -8,6 +8,8 @@ import { Document, Element } from "domhandler";
 
 const tempDir = path.join(os.tmpdir(), "FiddleMeThis");
 
+const usedTemp = false;
+
 export const unzip = async (file: path.ParsedPath): Promise<string> => {
   await createTempDir();
   const unzipDir = path.join(tempDir, file.name);
@@ -30,6 +32,10 @@ const createTempDir = async () => {
 };
 
 export const cleanTemp = () => {
+  if (!usedTemp) {
+    return;
+  }
+
   try {
     fs.rmSync(tempDir, { recursive: true });
   } catch (err) {

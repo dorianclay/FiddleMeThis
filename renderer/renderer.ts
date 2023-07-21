@@ -60,3 +60,5 @@ document.addEventListener("drop", async (event) => {
     console.error(err);
   }
 });
+
+import './app'
