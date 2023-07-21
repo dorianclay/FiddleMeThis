@@ -50,5 +50,5 @@ document.addEventListener("drop", async (event) => {
   }
   console.log(pathArr);
   const data = await window.dropbox.drop(pathArr);
-  console.log(data);
+  console.log(`${data.error ? "Error! " : ""}${data.message}`);
 });

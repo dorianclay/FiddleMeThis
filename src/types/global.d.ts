@@ -1,3 +1,5 @@
+import FileResponse from "./FileResponse";
+
 export {};
 
 declare global {
@@ -8,7 +10,7 @@ declare global {
       electron: () => string;
     };
     dropbox: {
-      drop: (paths: string[]) => Promise<string>;
+      drop: (paths: string[]) => Promise<FileResponse>;
     };
   }
 }
