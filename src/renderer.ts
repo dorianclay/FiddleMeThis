@@ -49,6 +49,16 @@ document.addEventListener("drop", async (event) => {
     pathArr.push(f.path); // assemble array for main.js
   }
   console.log(pathArr);
-  const data = await window.dropbox.drop(pathArr);
-  console.log(`${data.error ? "Error! " : ""}${data.message}`);
+
+  try {
+    const data = await window.dropbox.drop(pathArr);
+    if (data.sessionData) {
+      console.log(
+        `Successfully parsed SAZ index file with ${data.sessionData.length} lines`,
+      );
+    }
+    console.log(`${data.error ? "Error! " : ""}${data.message}`);
+  } catch (err) {
+    console.error(err);
+  }
 });

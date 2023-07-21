@@ -1,9 +1,10 @@
 import fs from "fs";
-import zlib from "zlib";
 import os from "node:os";
 import path from "path";
-import { access, mkdir } from "node:fs/promises";
+import { access, mkdir, readFile } from "node:fs/promises";
 import extract from "extract-zip";
+import { parseDocument } from "htmlparser2";
+import { Document, Element } from "domhandler";
 
 const tempDir = path.join(os.tmpdir(), "FiddleMeThis");
 
@@ -12,7 +13,6 @@ export const unzip = async (file: path.ParsedPath): Promise<string> => {
   const unzipDir = path.join(tempDir, file.name);
 
   await extract(path.format(file), { dir: unzipDir });
-  console.log("Extraction complete");
 
   return unzipDir;
 };
@@ -32,4 +32,45 @@ const createTempDir = async () => {
 export const cleanTemp = () => {
   console.log(`Cleaning ${tempDir}`);
   fs.rmSync(tempDir, { recursive: true });
+};
+
+export const parseSazIndex = async (indexFile: string): Promise<string[][]> => {
+  console.log("parsing saz file...");
+
+  const fileContents = await readFile(indexFile);
+
+  const dom: Document = parseDocument(fileContents.toString());
+  const tableElements: Element[] =
+    dom.lastChild.lastChild.firstChild.lastChild.children;
+
+  const sessionData = [
+    [
+      "#",
+      "Result",
+      "Protocol",
+      "Host",
+      "URL",
+      "Body",
+      "Caching",
+      "Content-Type",
+      "Process",
+      "Comments",
+      "Custom",
+    ],
+  ];
+
+  for (const row of tableElements) {
+    const rowData: string[] = [];
+    let links = true;
+    for (const cell of row.children) {
+      if (links) {
+        links = false;
+      } else {
+        rowData.push(cell.firstChild?.data);
+      }
+    }
+    sessionData.push(rowData);
+  }
+
+  return sessionData;
 };
